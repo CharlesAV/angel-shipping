@@ -19,8 +19,6 @@ class ShippingServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('angel/shipping');
-		
-		include __DIR__ . '../../../routes.php';
 
 		$bindings = array(
 			'Shipping' => '\Angel\Shipping\Shipping',

@@ -174,10 +174,10 @@ The methods are defined by the 'code' the shipping company uses for that method 
 
 ```php
 ...
-'name' => Array(
+[names] => Array(
 	'01' => 'UPS Next Day Air',
 	'02' => 'UPS Second Day Air',
 	'03' => 'UPS Ground'
-)
+),
 ...
 ```
