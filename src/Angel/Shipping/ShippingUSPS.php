@@ -136,9 +136,6 @@ if(!class_exists('ShippingUSPS',false)) {
 		 * @return array An array of shipping costs in array('code' => 'cost') format.
 		 */
 		function calculate($shipping) {
-			// Methods
-			$methods = array_filter($this->methods);
-			
 			// Packages - make sure they don't exceed maximum
 			$packages = $shipping->packages;
 			if($this->package_max) $packages = $shipping->packages_max($packages,$this->package_max);
@@ -152,7 +149,7 @@ if(!class_exists('ShippingUSPS',false)) {
 				throw new \Exception("No 'shipping' object passed.");
 			}
 			// No methods
-			if(!$methods) {
+			if(!$this->methods) {
 				throw new \Exception("No shipping methods defined.");
 			}
 			

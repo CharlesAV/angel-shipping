@@ -76,9 +76,6 @@ if(!class_exists('ShippingFedEx',false)) {
 		 * @return array An array of shipping costs in array('code' => 'cost') format.
 		 */
 		function calculate($shipping) {
-			// Methods
-			$methods = array_filter($this->methods);
-			
 			// Packages - make sure they don't exceed maximum
 			$packages = $shipping->packages;
 			//if($this->package_max) $packages = $shipping->packages_max($packages,$this->package_max); // Currently  has no max
@@ -92,7 +89,7 @@ if(!class_exists('ShippingFedEx',false)) {
 				throw new \Exception("No 'shipping' object passed.");
 			}
 			// No methods
-			if(!$methods) {
+			if(!$this->methods) {
 				throw new \Exception("No shipping methods defined.");
 			}
 			// No SoapClient class
@@ -247,7 +244,7 @@ if(!class_exists('ShippingFedEx',false)) {
 				if($response->HighestSeverity != 'FAILURE' && $response->HighestSeverity != 'ERROR') {
 					foreach($response->RateReplyDetails as $rateReply) {   
 						$method = $rateReply->ServiceType;
-						if(in_array($method,$methods)) {
+						if(in_array($method,$this->methods)) {
 							$rate = $rateReply->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount;
 							if($rate) {
 								if(!isset($rates['rates'][$method])) $rates['rates'][$method] = 0;

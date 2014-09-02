@@ -16,6 +16,7 @@ Issue a `composer update` to install the package.
 Add the following service provider to your `providers` array in `app/config/app.php`:
 ```php
 'Angel\Shipping\ShippingServiceProvider'
+```
 
 Issue the following command:
 ```bash
@@ -164,4 +165,25 @@ Array
         )
 
 )
+```
+
+Use
+------------
+
+Each shipping company has several shipping 'methods' available.  By default, we'll return the rates for all methods that can be used to ship your specified package. If you want to limit what 'methods' we calculate the shipping rates for, however, you can pass an array of methods in the first parameter when setting up the company's shipping class.
+
+For example (UPS):
+
+```php
+// Methods
+$methods = array(
+	// United States Domestic Shipments
+	'01', // UPS Next Day Air
+	'02', // UPS Second Day Air
+	'03' // UPS Ground
+);
+
+// Company
+$shipping_company = App::make('ShippingUPS',array('methods' => $methods));
+$shipping->company($shipping_company);
 ```
