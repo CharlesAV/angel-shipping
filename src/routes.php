@@ -11,9 +11,9 @@ Route::get('shipping',function() {
 	$shipping->debug = 1;
 	
 	$companies = array(
-		'USPS',
+		//'USPS',
 		//'UPS',
-		//'FedEx'
+		'FedEx'
 	);
 	foreach($companies as $company) {
 		print "<br />

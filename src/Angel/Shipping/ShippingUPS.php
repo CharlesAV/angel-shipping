@@ -92,6 +92,21 @@ if(!class_exists('ShippingUPS',false)) {
 			'54', // UPS Worldwide Express Plus
 			'65', // UPS Saver*/
 		);
+		/** An array of method codes and their corresponding names. */
+		var $names = array(
+			'01' => 'UPS Next Day Air',
+			'02' => 'UPS Second Day Air',
+			'03' => 'UPS Ground',
+			'07' => 'UPS Worldwide Express',
+			'08' => 'UPS Worldwide Expedited',
+			'11' => 'UPS Standard',
+			'12' => 'UPS Three-Day Select',
+			'13' => 'UPS Next Day Air Saver',
+			'14' => 'UPS Next Day Air Early A.M.',
+			'54' => 'UPS Worldwide Express Plus',
+			'59' => 'UPS Second Day Air A.M.',
+			'65' => 'UPS Saver',
+		);
 		
 		/**
 		 * Constructs the class.
@@ -415,11 +430,22 @@ if(!class_exists('ShippingUPS',false)) {
 					$rates['packages'][$x]['package'] = $packages[$x];
 					if(!isset($rates['packages'][$x]['rates'][$method])) $rates['packages'][$x]['rates'][$method] = 0;
 					$rates['packages'][$x]['rates'][$method] += $rate;
+					if(!isset($rates['names'][$method])) $rates['names'][$method] = $this->name($method);
 				}
 			}
 			
 			// Return
 			return $rates;
+		}
+		
+		/**
+		 * Returns name for the given method code.
+		 *
+		 * @param string $code The method code you want to get the name of.
+		 * @return string The name for the given method code.
+		 */
+		function name($code) {
+			return $this->names[$code];	
 		}
 	}
 }

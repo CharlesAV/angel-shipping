@@ -69,7 +69,7 @@ $shipping->to_country = 'US'; // The country code you'll be shipping the package
 $shipping->debug = 1;
 
 // Company
-$shipping_company = App::make('ShippingUSPS');
+$shipping_company = App::make('ShippingFedEx');
 $shipping->company($shipping_company);
 	
 // Package
@@ -88,35 +88,19 @@ $shipping->package($package);
 $rates = $shipping->calculate();
 ```
 
-The resulting array that's returned by the calculate() method will contain both the total 'rates' and information about the 'packages' (dimensions, weight, price per package, etc.). An example (returned by USPS):
+The resulting array that's returned by the calculate() method will contain the total 'rates', information about each package (dimensions, weight, rate, etc.), and the name that corresponds to each method code. An example (returned by FedEx):
 
 ```php
 Array
 (
     [rates] => Array
         (
-            [Priority Mail Express] => 38.8
-            [Priority Mail Express Hold For Pickup] => 38.8
-            [Priority Mail Express Flat Rate Boxes] => 44.95
-            [Priority Mail Express Flat Rate Boxes Hold For Pickup] => 44.95
-            [Priority Mail Express Flat Rate Envelope] => 19.99
-            [Priority Mail Express Flat Rate Envelope Hold For Pickup] => 19.99
-            [Priority Mail Express Legal Flat Rate Envelope] => 19.99
-            [Priority Mail Express Legal Flat Rate Envelope Hold For Pickup] => 19.99
-            [Priority Mail Express Padded Flat Rate Envelope] => 19.99
-            [Priority Mail Express Padded Flat Rate Envelope Hold For Pickup] => 19.99
-            [Priority Mail] => 10.25
-            [Priority Mail Large Flat Rate Box] => 17.45
-            [Priority Mail Medium Flat Rate Box] => 12.35
-            [Priority Mail Flat Rate Envelope] => 5.6
-            [Priority Mail Legal Flat Rate Envelope] => 5.75
-            [Priority Mail Padded Flat Rate Envelope] => 5.95
-            [Priority Mail Gift Card Flat Rate Envelope] => 5.6
-            [Priority Mail Small Flat Rate Envelope] => 5.6
-            [Priority Mail Window Flat Rate Envelope] => 5.6
-            [Standard Post] => 8.76
-            [Media Mail] => 3.17
-            [Library Mail] => 3.02
+            [PRIORITY_OVERNIGHT] => 72.76
+            [STANDARD_OVERNIGHT] => 67.74
+            [FEDEX_2_DAY_AM] => 37.28
+            [FEDEX_2_DAY] => 32.7
+            [FEDEX_EXPRESS_SAVER] => 25.29
+            [FEDEX_GROUND] => 12.03
         )
 
     [packages] => Array
@@ -136,38 +120,32 @@ Array
 
                     [rates] => Array
                         (
-                            [Priority Mail Express] => 38.8
-                            [Priority Mail Express Hold For Pickup] => 38.8
-                            [Priority Mail Express Flat Rate Boxes] => 44.95
-                            [Priority Mail Express Flat Rate Boxes Hold For Pickup] => 44.95
-                            [Priority Mail Express Flat Rate Envelope] => 19.99
-                            [Priority Mail Express Flat Rate Envelope Hold For Pickup] => 19.99
-                            [Priority Mail Express Legal Flat Rate Envelope] => 19.99
-                            [Priority Mail Express Legal Flat Rate Envelope Hold For Pickup] => 19.99
-                            [Priority Mail Express Padded Flat Rate Envelope] => 19.99
-                            [Priority Mail Express Padded Flat Rate Envelope Hold For Pickup] => 19.99
-                            [Priority Mail] => 10.25
-                            [Priority Mail Large Flat Rate Box] => 17.45
-                            [Priority Mail Medium Flat Rate Box] => 12.35
-                            [Priority Mail Flat Rate Envelope] => 5.6
-                            [Priority Mail Legal Flat Rate Envelope] => 5.75
-                            [Priority Mail Padded Flat Rate Envelope] => 5.95
-                            [Priority Mail Gift Card Flat Rate Envelope] => 5.6
-                            [Priority Mail Small Flat Rate Envelope] => 5.6
-                            [Priority Mail Window Flat Rate Envelope] => 5.6
-                            [Standard Post] => 8.76
-                            [Media Mail] => 3.17
-                            [Library Mail] => 3.02
+                            [PRIORITY_OVERNIGHT] => 72.76
+                            [STANDARD_OVERNIGHT] => 67.74
+                            [FEDEX_2_DAY_AM] => 37.28
+                            [FEDEX_2_DAY] => 32.7
+                            [FEDEX_EXPRESS_SAVER] => 25.29
+                            [FEDEX_GROUND] => 12.03
                         )
 
                 )
 
         )
 
+    [names] => Array
+        (
+            [PRIORITY_OVERNIGHT] => Priority Overnight
+            [STANDARD_OVERNIGHT] => Standard Overnight
+            [FEDEX_2_DAY_AM] => 2 Day AM
+            [FEDEX_2_DAY] => 2 Day
+            [FEDEX_EXPRESS_SAVER] => Express Saver
+            [FEDEX_GROUND] => Ground
+        )
+
 )
 ```
 
-Use
+Methods
 ------------
 
 Each shipping company has several shipping 'methods' available.  By default, we'll return the rates for all methods that can be used to ship your specified package. If you want to limit what 'methods' we calculate the shipping rates for, however, you can pass an array of methods in the first parameter when setting up the company's shipping class.
@@ -175,6 +153,8 @@ Each shipping company has several shipping 'methods' available.  By default, we'
 For example (UPS):
 
 ```php
+...
+
 // Methods
 $methods = array(
 	// United States Domestic Shipments
@@ -186,4 +166,18 @@ $methods = array(
 // Company
 $shipping_company = App::make('ShippingUPS',array('methods' => $methods));
 $shipping->company($shipping_company);
+
+...
+```
+
+The methods are defined by the 'code' the shipping company uses for that method in their API (example: UPS's '01' code is for the method 'UPS Next Day Air'). As we mentioned before, the array returned by the calculate() method contains an array for the method 'name' that matches each method 'code'.  For example, in our above request, the 'names' array in the array returned by calculate() would be:
+
+```php
+...
+'name' => Array(
+	'01' => 'UPS Next Day Air',
+	'02' => 'UPS Second Day Air',
+	'03' => 'UPS Ground'
+)
+...
 ```

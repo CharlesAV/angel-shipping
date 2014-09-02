@@ -44,6 +44,30 @@ if(!class_exists('ShippingFedEx',false)) {
 			'FEDEX_FREIGHT',
 			'FEDEX_NATIONAL_FREIGHT',
 		);
+		/** An array of method codes and their corresponding names. */
+		var $names = array(
+			'EUROPE_FIRST_INTERNATIONAL_PRIORITY' => 'Europe First Priority',
+			'FEDEX_1_DAY_FREIGHT' => '1 Day Freight',
+			'FEDEX_2_DAY' => '2 Day',
+			'FEDEX_2_DAY_AM' => '2 Day AM',
+			'FEDEX_2_DAY_FREIGHT' => '2 Day Freight',
+			'FEDEX_3_DAY_FREIGHT' => '3 Day Freight',
+			'FEDEX_EXPRESS_SAVER' => 'Express Saver',
+			'FEDEX_FREIGHT' => 'Freight',
+			'FEDEX_GROUND' => 'Ground',
+			'FEDEX_NATIONAL_FREIGHT' => 'National Freight',
+			'FIRST_OVERNIGHT' => 'First Overnight',
+			'GROUND_HOME_DELIVERY' => 'Home Delivery',
+			'INTERNATIONAL_ECONOMY' => 'International Economy',
+			'INTERNATIONAL_ECONOMY_FREIGHT' => 'International Economy Freight',
+			'INTERNATIONAL_FIRST' => 'International First',
+			'INTERNATIONAL_GROUND' => 'International Ground',
+			'INTERNATIONAL_PRIORITY' => 'International Priority',
+			'INTERNATIONAL_PRIORITY_FREIGHT' => 'International Priority Freight',
+			'PRIORITY_OVERNIGHT' => 'Priority Overnight',
+			'SMART_POST' => 'Smart Post',
+			'STANDARD_OVERNIGHT' => 'Standard Overnight',
+		);
 		
 		/**
 		 * Constructs the class.
@@ -252,6 +276,7 @@ if(!class_exists('ShippingFedEx',false)) {
 								$rates['packages'][$package_x]['package'] = $package;
 								if(!isset($rates['packages'][$package_x]['rates'][$method])) $rates['packages'][$package_x]['rates'][$method] = 0;
 								$rates['packages'][$package_x]['rates'][$method] += $rate;
+								if(!isset($rates['names'][$method])) $rates['names'][$method] = $this->name($method);
 							}
 						}
 					}
@@ -321,6 +346,16 @@ if(!class_exists('ShippingFedEx',false)) {
 			
 			// Return
 			return $total;*/
+		}
+		
+		/**
+		 * Returns name for the given method code.
+		 *
+		 * @param string $code The method code you want to get the name of.
+		 * @return string The name for the given method code.
+		 */
+		function name($code) {
+			return $this->names[$code];	
 		}
 	}
 }

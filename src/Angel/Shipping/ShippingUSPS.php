@@ -254,6 +254,7 @@ if(!class_exists('ShippingUSPS',false)) {
 									$rates['packages'][$x]['package'] = $packages[$x];
 									if(!isset($rates['packages'][$x]['rates'][$name])) $rates['packages'][$x]['rates'][$name] = 0;
 									$rates['packages'][$x]['rates'][$name] += $rate[1];
+									if(!isset($rates['names'][$name])) $rates['names'][$name] = $this->name($name);
 								}
 							}
 						}
@@ -551,6 +552,7 @@ if(!class_exists('ShippingUSPS',false)) {
 									$rates['rates'][$name] += $rate[1];
 									$rates['packages'][$x]['package'] = $packages[$x];
 									$rates['packages'][$x]['rates'][$name] += $rate[1];
+									if(!isset($rates['names'][$name])) $rates['names'][$name] = $name;
 								}
 							}
 						}
@@ -560,6 +562,16 @@ if(!class_exists('ShippingUSPS',false)) {
 			
 			// Return
 			return $rates;
+		}
+		
+		/**
+		 * Returns name for the given method code.
+		 *
+		 * @param string $code The method code you want to get the name of.
+		 * @return string The name for the given method code.
+		 */
+		function name($code) {
+			return $code;	
 		}
 		
 		/**
